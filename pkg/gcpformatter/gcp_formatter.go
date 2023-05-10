@@ -95,7 +95,7 @@ func (j *GCPFormatter) Format(message *string, fields map[string]any) any {
 }
 
 func (j *GCPFormatter) formatTracing(fields map[string]any, data *model.LogEntry) {
-	req := commons.GetFieldAsRequestPtrOrElse(logx.FieldNameHttpRequest, fields, nil)
+	req := commons.GetFieldAsRequestPtrOrElse(logx.FieldNameHTTPRequest, fields, nil)
 	if data.Trace == "" && j.projectID != "" && req != nil {
 		data.Trace = fmt.Sprintf(`projects/%s/traces/%s`, j.projectID, j.extractTraceID(req))
 		data.SpanId = j.extractSpanID(req)
@@ -127,8 +127,8 @@ func (j *GCPFormatter) formatJsonPayload(fields map[string]any) map[string]json.
 		logx.FieldNameLogLevel,
 		logx.FieldNameMessage,
 		logx.FieldNameTimestamp,
-		logx.FieldNameHttpRequest,
-		logx.FieldNameHttpResponse,
+		logx.FieldNameHTTPRequest,
+		logx.FieldNameHTTPResponse,
 		FieldNameTraceId,
 		FieldNameTraceEnabled,
 		FieldNameTraceSpanId,
@@ -183,7 +183,7 @@ func (j *GCPFormatter) formatOperation(fields map[string]any) *model.Operation {
 }
 
 func (j *GCPFormatter) formatHttpRequest(fields map[string]any) *model.HttpRequest {
-	req := commons.GetFieldAsRequestPtrOrElse(logx.FieldNameHttpRequest, fields, nil)
+	req := commons.GetFieldAsRequestPtrOrElse(logx.FieldNameHTTPRequest, fields, nil)
 	if req == nil {
 		return nil
 	}
@@ -204,7 +204,7 @@ func (j *GCPFormatter) formatHttpRequest(fields map[string]any) *model.HttpReque
 		Latency:                        commons.GetFieldAsStringOrElse(FieldNameLatency, fields, ""),
 	}
 
-	res := commons.GetFieldAsResponsePtrOrElse(logx.FieldNameHttpResponse, fields, nil)
+	res := commons.GetFieldAsResponsePtrOrElse(logx.FieldNameHTTPResponse, fields, nil)
 	if nil == res {
 		return result
 	}
