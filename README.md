@@ -57,9 +57,33 @@ func logSomething(logger logx.Logger) {
 		"number", 1981,
 	)
 }
-
 ```
 
+This will output a single-line JSON to stdout:
+```json
+{
+  "severity": "INFO",
+  "traceSampled": true,
+  "trace": "projects/your-gcp-project-id/traces/1c7886eaa2474d5da4da8c4f4bf6fdeb",
+  "spanId": "1234567890",
+  "textPayload": "This is an error message",
+  "jsonPayload": {
+    "a random": "value",
+    "number": 1981
+  },
+  "httpRequest": {
+    "requestMethod": "GET",
+    "requestSize": "108",
+    "protocol": "HTTP/1.1"
+  },
+  "sourceLocation": {
+    "file": "/Users/mr/devel/logx/gcp-formatter/examples/basic.go",
+    "line": "38",
+    "function": "main.logSomething"
+  },
+  "timestamp": "2023-05-10T18:56:46.729533+02:00"
+}
+```
 ## Development
 
 ### Requirement
