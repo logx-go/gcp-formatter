@@ -5,7 +5,7 @@ Google Cloud Logging compliant output formatter
 ## Install
 
 ```shell
-go get -u github.com/logx-go/log-adapter
+go get -u github.com/logx-go/gcp-formatter
 ```
 
 ## Usage
