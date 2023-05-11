@@ -68,7 +68,7 @@ func (j *GCPFormatter) WithProjectID(p string) *GCPFormatter {
 	return c
 }
 
-func (j *GCPFormatter) Format(message *string, fields map[string]any) (messageF string, fieldsF map[string]any) {
+func (j *GCPFormatter) Format(message string, fields map[string]any) (messageF string, fieldsF map[string]any) {
 	data := &model.LogEntry{
 		Severity:       j.formatSeverity(fields),
 		InsertId:       commons.GetFieldAsStringOrElse(FieldNameInsertId, fields, ""),
@@ -91,7 +91,7 @@ func (j *GCPFormatter) Format(message *string, fields map[string]any) (messageF 
 		log.Panic(err)
 	}
 
-	return string(enc), fields
+	return string(enc), nil
 }
 
 func (j *GCPFormatter) formatTracing(fields map[string]any, data *model.LogEntry) {
