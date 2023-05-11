@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -68,7 +67,7 @@ func (j *GCPFormatter) WithProjectID(p string) *GCPFormatter {
 	return c
 }
 
-func (j *GCPFormatter) Format(message string, fields map[string]any) (messageF string, fieldsF map[string]any) {
+func (j *GCPFormatter) Format(message string, fields map[string]any) string {
 	data := &model.LogEntry{
 		Severity:       j.formatSeverity(fields),
 		InsertId:       commons.GetFieldAsStringOrElse(FieldNameInsertId, fields, ""),
@@ -88,10 +87,10 @@ func (j *GCPFormatter) Format(message string, fields map[string]any) (messageF s
 
 	enc, err := json.Marshal(data)
 	if err != nil {
-		log.Panic(err)
+		panic(err)
 	}
 
-	return string(enc), nil
+	return string(enc)
 }
 
 func (j *GCPFormatter) formatTracing(fields map[string]any, data *model.LogEntry) {
