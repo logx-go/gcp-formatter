@@ -1,4 +1,4 @@
-github.com/logx-go/commons v0.0.6 h1:oMcdNfJLrXOcqhzfYAclIzy2fvxLTzIJGATqXwEZHj0=
-github.com/logx-go/commons v0.0.6/go.mod h1:0iynIO8Q2hsJ3ChSITPyvpCa7fvTS/CLvCDnAy+JmKc=
-github.com/logx-go/contract v0.0.4 h1:xk0cbZImHoNceDC2gUqSruF9MNUo7N0caHmncoq3Z6g=
-github.com/logx-go/contract v0.0.4/go.mod h1:L/PvzT7VCYmBko01BubFTY8Wdodx68nBwVRQiBYZ024=
+github.com/logx-go/commons v0.0.8 h1:lJrcutcwyns1Knvb6qTRQUGi6zu5F7MAtoHxP6YvaRM=
+github.com/logx-go/commons v0.0.8/go.mod h1:0iynIO8Q2hsJ3ChSITPyvpCa7fvTS/CLvCDnAy+JmKc=
+github.com/logx-go/contract v0.0.6 h1:uR6cAr4xsIdL8uTmg2YX1Sxz5qVED+YOHIoBcmYJklI=
+github.com/logx-go/contract v0.0.6/go.mod h1:L/PvzT7VCYmBko01BubFTY8Wdodx68nBwVRQiBYZ024=
