@@ -68,13 +68,14 @@ func (j *GCPFormatter) WithProjectID(p string) *GCPFormatter {
 }
 
 func (j *GCPFormatter) Format(message string, fields map[string]any) string {
+	fields[logx.FieldNameMessage] = commons.GetFieldAsStringOrElse(logx.FieldNameMessage, fields, message)
+
 	data := &model.LogEntry{
 		Severity:       j.formatSeverity(fields),
 		InsertId:       commons.GetFieldAsStringOrElse(FieldNameInsertId, fields, ""),
 		Trace:          commons.GetFieldAsStringOrElse(FieldNameTraceId, fields, ""),
 		TraceSampled:   commons.GetFieldAsBoolOrElse(FieldNameTraceEnabled, fields, false),
 		SpanId:         commons.GetFieldAsStringOrElse(FieldNameTraceSpanId, fields, ""),
-		TextPayload:    commons.GetAsStringOrElse(message, ""),
 		Labels:         commons.GetFieldAsStringMapOrElse(FieldNameLabels, fields, nil),
 		Timestamp:      commons.GetFieldAsTimeOrElse(logx.FieldNameTimestamp, fields, time.Now()),
 		JsonPayload:    j.formatJsonPayload(fields),
@@ -124,7 +125,6 @@ func (j *GCPFormatter) formatJsonPayload(fields map[string]any) map[string]json.
 		logx.FieldNameCallerLine,
 		logx.FieldNameCallerFunc,
 		logx.FieldNameLogLevel,
-		logx.FieldNameMessage,
 		logx.FieldNameTimestamp,
 		logx.FieldNameHTTPRequest,
 		logx.FieldNameHTTPResponse,
