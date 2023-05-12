@@ -70,37 +70,37 @@ func (j *GCPFormatter) WithProjectID(p string) *GCPFormatter {
 func (j *GCPFormatter) Format(message string, fields map[string]any) string {
 	fields[logx.FieldNameMessage] = commons.GetFieldAsStringOrElse(logx.FieldNameMessage, fields, message)
 
-	data := &model.LogEntry{
-		Severity:       j.formatSeverity(fields),
-		InsertId:       commons.GetFieldAsStringOrElse(FieldNameInsertId, fields, ""),
-		Trace:          commons.GetFieldAsStringOrElse(FieldNameTraceId, fields, ""),
-		TraceSampled:   commons.GetFieldAsBoolOrElse(FieldNameTraceEnabled, fields, false),
-		SpanId:         commons.GetFieldAsStringOrElse(FieldNameTraceSpanId, fields, ""),
-		Labels:         commons.GetFieldAsStringMapOrElse(FieldNameLabels, fields, nil),
-		Timestamp:      commons.GetFieldAsTimeOrElse(logx.FieldNameTimestamp, fields, time.Now()),
-		JsonPayload:    j.formatJsonPayload(fields),
-		HttpRequest:    j.formatHttpRequest(fields),
-		Operation:      j.formatOperation(fields),
-		SourceLocation: j.formatSourceLocation(fields),
+	data := j.formatJsonPayload(fields)
+
+	// see https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry
+	data["severity"] = j.formatSeverity(fields)
+	data["insertId"] = commons.GetFieldAsStringOrElse(FieldNameInsertId, fields, "")
+	data["traceSampled"] = commons.GetFieldAsBoolOrElse(FieldNameTraceEnabled, fields, false)
+	data["trace"] = commons.GetFieldAsStringOrElse(FieldNameTraceId, fields, "")
+	data["spanId"] = commons.GetFieldAsStringOrElse(FieldNameTraceSpanId, fields, "")
+	data["labels"] = commons.GetFieldAsStringMapOrElse(FieldNameLabels, fields, nil)
+	data["httpRequest"] = j.formatHttpRequest(fields)
+	data["operation"] = j.formatOperation(fields)
+	data["sourceLocation"] = j.formatSourceLocation(fields)
+	data["timestamp"] = commons.GetFieldAsTimeOrElse(logx.FieldNameTimestamp, fields, time.Now())
+
+	req := commons.GetFieldAsRequestPtrOrElse(logx.FieldNameHTTPRequest, fields, nil)
+	if data["trace"] == "" && j.projectID != "" && req != nil {
+		traceID := j.extractTraceID(req)
+		if traceID != "" {
+			data["trace"] = fmt.Sprintf(`projects/%s/traces/%s`, j.projectID, traceID)
+			data["spanId"] = j.extractSpanID(req)
+			data["traceSampled"] = j.extractTraceEnabled(req)
+
+		}
 	}
 
-	j.formatTracing(fields, data)
-
-	enc, err := json.Marshal(data)
+	enc, err := json.Marshal(commons.FilterFieldsWithValues(data))
 	if err != nil {
 		panic(err)
 	}
 
 	return string(enc)
-}
-
-func (j *GCPFormatter) formatTracing(fields map[string]any, data *model.LogEntry) {
-	req := commons.GetFieldAsRequestPtrOrElse(logx.FieldNameHTTPRequest, fields, nil)
-	if data.Trace == "" && j.projectID != "" && req != nil {
-		data.Trace = fmt.Sprintf(`projects/%s/traces/%s`, j.projectID, j.extractTraceID(req))
-		data.SpanId = j.extractSpanID(req)
-		data.TraceSampled = j.extractTraceEnabled(req)
-	}
 }
 
 func (j *GCPFormatter) formatSourceLocation(fields map[string]any) *model.SourceLocation {
@@ -117,9 +117,9 @@ func (j *GCPFormatter) formatSourceLocation(fields map[string]any) *model.Source
 	return sourceLocation
 }
 
-func (j *GCPFormatter) formatJsonPayload(fields map[string]any) map[string]json.RawMessage {
+func (j *GCPFormatter) formatJsonPayload(fields map[string]any) map[string]any {
 	hasEntries := false
-	jsonPayload := make(map[string]json.RawMessage)
+	jsonPayload := make(map[string]any)
 	skip := []string{
 		logx.FieldNameCallerFile,
 		logx.FieldNameCallerLine,
@@ -151,7 +151,7 @@ func (j *GCPFormatter) formatJsonPayload(fields map[string]any) map[string]json.
 		}
 
 		if raw, err := json.Marshal(value); err == nil {
-			jsonPayload[name] = raw
+			jsonPayload[name] = json.RawMessage(raw)
 			hasEntries = true
 		}
 	}
@@ -187,9 +187,14 @@ func (j *GCPFormatter) formatHttpRequest(fields map[string]any) *model.HttpReque
 		return nil
 	}
 
+	url := req.RequestURI
+	if req.URL != nil {
+		url = req.URL.String()
+	}
+
 	result := &model.HttpRequest{
 		RequestMethod:                  req.Method,
-		RequestUrl:                     req.RequestURI,
+		RequestUrl:                     url,
 		RequestSize:                    j.calculateRequestSize(req),
 		UserAgent:                      req.UserAgent(),
 		RemoteIp:                       req.RemoteAddr,
