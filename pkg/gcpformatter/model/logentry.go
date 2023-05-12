@@ -12,7 +12,6 @@ type LogEntry struct {
 	TraceSampled   bool                       `json:"traceSampled,omitempty"`
 	Trace          string                     `json:"trace,omitempty"`
 	SpanId         string                     `json:"spanId,omitempty"`
-	TextPayload    string                     `json:"textPayload,omitempty"`
 	JsonPayload    map[string]json.RawMessage `json:"jsonPayload,omitempty"`
 	Labels         map[string]string          `json:"labels,omitempty"`
 	HttpRequest    *HttpRequest               `json:"httpRequest,omitempty"`
