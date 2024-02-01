@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/logx-go/commons v0.0.12
-	github.com/logx-go/contract v0.0.8
+	github.com/logx-go/contract v0.0.9
 	github.com/stretchr/testify v1.8.2
 )
 
