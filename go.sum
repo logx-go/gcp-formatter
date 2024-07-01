@@ -2,8 +2,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/logx-go/commons v0.0.14 h1:AkazO3blMBp6byUqdJUzeOxCLCkIQbUcs/nlRSM47V0=
 github.com/logx-go/commons v0.0.14/go.mod h1:0iynIO8Q2hsJ3ChSITPyvpCa7fvTS/CLvCDnAy+JmKc=
-github.com/logx-go/contract v0.0.12 h1:xCgLRug7NWUvLOwCV/ej8pr8Xj1uk0yICD9W6gAx5TQ=
-github.com/logx-go/contract v0.0.12/go.mod h1:L/PvzT7VCYmBko01BubFTY8Wdodx68nBwVRQiBYZ024=
+github.com/logx-go/contract v0.0.13 h1:eBuaaVBlZzVXac8pqHVdwZNRVCX0f4S7hXYXVvmK2hE=
+github.com/logx-go/contract v0.0.13/go.mod h1:L/PvzT7VCYmBko01BubFTY8Wdodx68nBwVRQiBYZ024=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
